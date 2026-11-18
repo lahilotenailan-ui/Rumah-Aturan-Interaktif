@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rumah Aturan Interaktif - Ayo Jadi Anak Tertib!</title>
+<style>
+:root{
+  --sky:#d9f2ff;--sun:#ffd43b;--red:#ff6b6b;--orange:#ff9f43;--green:#51cf66;--blue:#4dabf7;--purple:#9775fa;--pink:#ff8ec7;
+  --ink:#3b2f5e;--card:#ffffff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Baloo 2","Comic Sans MS","Comic Neue","Trebuchet MS",system-ui,sans-serif;
+  color:var(--ink);font-size:clamp(18px,2.2vw,24px);line-height:1.35;
+  background:linear-gradient(180deg,#bfe9ff 0%,#e8f8ff 45%,#fff7d6 100%);
+  min-height:100vh;background-attachment:fixed;
+}
+button,a.btn{font-family:inherit;font-size:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:5px solid var(--purple);outline-offset:3px}
+.app{max-width:1100px;margin:0 auto;padding:10px 12px 120px}
+[hidden]{display:none!important}
+/* header */
+.top{position:sticky;top:0;z-index:20;display:flex;gap:8px;align-items:center;justify-content:space-between;
+  padding:8px 12px;margin:0 -12px 10px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);
+  border-bottom:4px solid var(--sun);border-radius:0 0 22px 22px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.brand{font-weight:800;font-size:clamp(16px,2.4vw,24px);display:flex;align-items:center;gap:6px;min-width:0}
+.brand span.t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.pill{background:#fff3bf;border:3px solid var(--sun);border-radius:999px;padding:4px 12px;font-weight:800;white-space:nowrap}
+.ibtn{border:3px solid var(--blue);background:#e7f5ff;border-radius:16px;padding:4px 12px;font-weight:800;min-height:44px}
+.ibtn:hover{background:#d0ebff}
+.progwrap{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.progress{flex:1;height:14px;background:#e9ecef;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--sun),var(--orange));transition:width .5s;border-radius:99px}
+.proglabel{font-weight:800;font-size:.8em;white-space:nowrap}
+/* page */
+.page{display:none}
+.page.active{display:block;animation:pop .5s ease}
+@keyframes pop{0%{opacity:0;transform:translateY(20px) scale(.97)}100%{opacity:1;transform:none}}
+h1,h2,h3{margin:.2em 0;line-height:1.1}
+h1{font-size:clamp(32px,7vw,64px);color:var(--red);text-shadow:3px 3px 0 #fff,5px 5px 0 var(--sun);letter-spacing:1px}
+h2{font-size:clamp(26px,4.5vw,40px);color:var(--purple);text-align:center}
+h3.sec{font-size:clamp(22px,3.6vw,32px);color:var(--orange);text-align:center;margin:18px 0 6px}
+.center{text-align:center}
+.sub{font-size:clamp(22px,4vw,34px);font-weight:800;color:var(--orange)}
+.panel{background:var(--card);border:4px solid #fff;border-radius:28px;padding:16px;box-shadow:0 8px 0 rgba(77,171,247,.25),0 10px 24px rgba(0,0,0,.08);margin:12px 0}
+/* guide */
+.guide{display:flex;gap:10px;align-items:center;margin:6px 0 10px}
+.guide .av{font-size:clamp(46px,8vw,70px);animation:bob 2s ease-in-out infinite;flex-shrink:0;background:#fff;border-radius:50%;width:1.3em;height:1.3em;display:flex;align-items:center;justify-content:center;border:4px solid var(--pink)}
+.bubble{background:#fff;border:4px solid var(--pink);border-radius:24px;padding:10px 16px;font-weight:700;position:relative}
+.bubble::before{content:"";position:absolute;left:-16px;top:50%;margin-top:-10px;border:10px solid transparent;border-right-color:var(--pink)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes zoom{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+/* buttons */
+.btn{display:inline-block;border:0;border-radius:24px;padding:14px 26px;font-weight:800;font-size:clamp(20px,3vw,28px);min-height:60px;text-decoration:none;text-align:center;
+  color:#fff;background:var(--green);box-shadow:0 6px 0 #2f9e44;transition:transform .1s,box-shadow .1s;margin:6px}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 #2f9e44}
+.btn.blue{background:var(--blue);box-shadow:0 6px 0 #1c7ed6}
+.btn.orange{background:var(--orange);box-shadow:0 6px 0 #e8590c}
+.btn.purple{background:var(--purple);box-shadow:0 6px 0 #6741d9}
+.btn.red{background:var(--red);box-shadow:0 6px 0 #e03131}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btnrow{display:flex;flex-wrap:wrap;justify-content:center;align-items:center}
+/* cover */
+.cover{text-align:center;padding-top:6px}
+.scene{position:relative;font-size:clamp(80px,18vw,170px);line-height:1;margin:6px 0}
+.scene .homeic{display:inline-block;animation:zoom 3s ease-in-out infinite}
+.scene .sun{position:absolute;left:4%;top:-4%;font-size:.55em;animation:bob 3s infinite}
+.scene .cloud{position:absolute;right:6%;top:0;font-size:.5em;animation:bob 4s infinite}
+.scene .tree{position:absolute;bottom:0;font-size:.55em}
+.scene .t1{left:8%}.scene .t2{right:8%}
+.family{font-size:clamp(40px,9vw,80px);display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
+.family span{display:inline-block;animation:bob 2s ease-in-out infinite}
+.family span:nth-child(2){animation-delay:.3s}.family span:nth-child(3){animation-delay:.6s}.family span:nth-child(4){animation-delay:.9s}.family span:nth-child(5){animation-delay:1.2s}
+/* grids */
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.tile{background:#fff;border:5px solid var(--blue);border-radius:26px;padding:14px;text-align:center;font-weight:800;
+  box-shadow:0 6px 0 rgba(0,0,0,.08);transition:transform .15s;position:relative}
+.tile .ic{font-size:clamp(52px,9vw,84px);line-height:1.1;display:block}
+.tile:hover{transform:translateY(-4px) rotate(-1deg)}
+.c1{border-color:var(--red)}.c2{border-color:var(--orange)}.c3{border-color:var(--green)}.c4{border-color:var(--purple)}.c5{border-color:var(--blue)}.c6{border-color:var(--pink)}
+button.tile{width:100%;font-size:inherit;font-family:inherit}
+button.tile.seen{background:#ebfbee}
+button.tile.seen::after{content:"✅";position:absolute;top:6px;right:10px;font-size:1.1em}
+.detail{background:#fff9db;border:4px dashed var(--sun);border-radius:22px;padding:14px;text-align:center;font-weight:700;min-height:90px;animation:pop .4s;margin-top:12px}
+.defn{font-size:clamp(20px,3vw,28px);font-weight:700;text-align:center;background:#e7f5ff;border-radius:22px;padding:14px;border:4px solid var(--blue)}
+/* options */
+.q{font-size:clamp(22px,3.4vw,32px);font-weight:800;text-align:center;margin:8px 0 12px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.opt{background:#fff;border:5px solid #ced4da;border-radius:24px;padding:12px;font-weight:800;min-height:70px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;transition:transform .12s;box-shadow:0 5px 0 rgba(0,0,0,.08)}
+.opt:hover:not(:disabled){transform:scale(1.04);border-color:var(--blue)}
+.opt .big{font-size:clamp(50px,9vw,80px);line-height:1.1}
+.opt .ltr{background:var(--purple);color:#fff;border-radius:50%;width:1.6em;height:1.6em;display:inline-flex;align-items:center;justify-content:center}
+.opt.good{background:#d3f9d8;border-color:var(--green);animation:zoom .5s}
+.opt.bad{background:#ffe3e3;border-color:var(--red);animation:shake .4s}
+.opt:disabled{cursor:default}
+.fb{min-height:1.6em;text-align:center;font-weight:800;margin-top:10px;font-size:clamp(20px,3vw,28px)}
+.fb.ok{color:#2b8a3e}.fb.no{color:#e03131}
+/* house */
+.house{max-width:720px;margin:10px auto}
+.roof{height:clamp(70px,14vw,120px);background:var(--red);clip-path:polygon(50% 0,0 100%,100% 100%);margin-bottom:-4px;position:relative}
+.roof::after{content:"🏠 Rumahku";position:absolute;left:0;right:0;bottom:8%;text-align:center;color:#fff;font-weight:800;font-size:clamp(18px,3vw,28px)}
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff3bf;border:6px solid #e8590c;border-radius:0 0 20px 20px;padding:8px}
+.room{border:4px solid #fff;border-radius:16px;padding:10px 4px;font-weight:800;min-height:clamp(120px,22vw,170px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .15s;position:relative}
+.room .ic{font-size:clamp(44px,9vw,80px);line-height:1.1}
+.room:hover{transform:scale(1.04)}
+.room.on{outline:6px solid var(--sun)}
+.room.visited::after{content:"✅";position:absolute;top:4px;right:8px}
+.rm1{background:#d0ebff}.rm2{background:#ffe8cc}.rm3{background:#ffd8e8}.rm4{background:#d3f9d8}
+.rules{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}
+.rules li{background:#f3f0ff;border-radius:18px;padding:8px 14px;font-weight:800;display:flex;gap:10px;align-items:center}
+.rules li span{font-size:1.6em}
+.roomscene{font-size:clamp(50px,10vw,90px);text-align:center;letter-spacing:6px}
+/* tabs permainan */
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:8px 0}
+.tab{border:5px solid var(--purple);background:#f3f0ff;border-radius:22px;padding:10px 12px;font-weight:800;min-height:64px;line-height:1.15;transition:transform .12s}
+.tab:hover{transform:translateY(-3px)}
+.tab[aria-selected="true"]{background:var(--purple);color:#fff;box-shadow:0 5px 0 #6741d9}
+.tab small{display:block;font-size:.7em;font-weight:700}
+.gpane{display:none}
+.gpane.on{display:block;animation:pop .4s ease}
+.notice{background:#fff3bf;border:4px dashed var(--orange);border-radius:20px;padding:10px 14px;font-weight:800;margin:10px 0;text-align:center}
+.wwbox iframe{width:100%;max-width:900px;height:min(78vh,560px);min-height:380px;border:4px solid var(--purple);border-radius:20px;background:#fff;display:block;margin:0 auto}
+/* matching */
+.pair{display:grid;grid-template-columns:1fr auto 1fr auto;gap:8px;align-items:center;margin:10px 0;background:#fff;border:4px solid var(--blue);border-radius:22px;padding:10px}
+.pair .rule{font-weight:800;display:flex;align-items:center;gap:8px}
+.pair .rule .ic{font-size:2em}
+.pair .arr{font-size:1.6em;color:var(--orange)}
+select{font-family:inherit;font-size:clamp(16px,2.2vw,22px);padding:10px;border-radius:16px;border:4px solid var(--purple);background:#f8f0ff;font-weight:700;width:100%;min-height:56px;color:var(--ink)}
+.mark{font-size:2em;min-width:1.4em;text-align:center}
+@media(max-width:640px){.pair{grid-template-columns:1fr;text-align:center}.pair .rule{justify-content:center}.pair .arr{transform:rotate(90deg)}}
+/* inputs */
+input[type=text]{font-family:inherit;font-size:clamp(18px,2.4vw,24px);padding:10px 14px;border-radius:16px;border:4px solid var(--blue);width:100%;min-height:56px;font-weight:700;color:var(--ink)}
+.rq{margin:12px 0}
+.rq label{font-weight:800;display:block;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{border:3px solid var(--orange);background:#fff4e6;border-radius:99px;padding:6px 14px;font-size:.8em;font-weight:700;min-height:44px}
+.chip:hover{background:#ffe8cc}
+.promise{background:#fff;border:8px double var(--orange);border-radius:30px;padding:20px;text-align:center;margin:12px auto;max-width:640px;background-image:linear-gradient(135deg,#fff9db,#ffe3f1)}
+.promise .big{font-size:clamp(50px,10vw,80px)}
+.promise .txt{font-size:clamp(22px,4vw,34px);font-weight:800;color:var(--purple);margin:8px 0}
+.stars{font-size:clamp(40px,9vw,80px);text-align:center}
+.stars span{display:inline-block;animation:zoom 1.4s infinite}
+.stars span:nth-child(2){animation-delay:.3s}.stars span:nth-child(3){animation-delay:.6s}
+.bigscore{font-size:clamp(60px,14vw,120px);font-weight:900;color:var(--orange);text-align:center}
+.qicon{font-size:clamp(60px,12vw,100px);text-align:center}
+.qprog{text-align:center;font-weight:800;color:var(--purple)}
+.recap table{width:100%;border-collapse:collapse;margin:10px 0;font-weight:700}
+.recap td{padding:6px;border-bottom:2px dashed #ced4da}
+.recap td:last-child{text-align:right;white-space:nowrap}
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:8px;justify-content:center;align-items:center;padding:8px;background:rgba(255,255,255,.95);border-top:4px solid var(--sun);border-radius:22px 22px 0 0}
+.nav .btn{margin:0;padding:8px 18px;min-height:54px;font-size:clamp(17px,2.6vw,24px)}
+/* modal */
+#modal{position:fixed;inset:0;background:rgba(40,30,80,.55);z-index:50;display:none;align-items:center;justify-content:center;padding:14px}
+#modal.show{display:flex}
+#modal .box{background:#fff;border-radius:30px;border:6px solid var(--sun);max-width:640px;width:100%;max-height:90vh;overflow:auto;padding:18px;animation:pop .3s}
+#modal ol,#modal ul{padding-left:1.2em;margin:.4em 0}
+#modal li{margin:6px 0;font-weight:700}
+.menugrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.menugrid .btn{font-size:18px;min-height:50px;padding:6px 10px;margin:0}
+.conf{position:fixed;top:-10vh;font-size:30px;z-index:60;pointer-events:none;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(360deg);opacity:.6}}
+.foot{text-align:center;font-size:.7em;opacity:.75;margin-top:14px}
+#printOnly{display:none}
+@media print{
+  body>*{display:none!important}
+  body>#printOnly{display:block!important;padding:20px}
+  body{background:#fff!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand">🏠 <span class="t">Rumah Aturan Interaktif</span></div>
+    <div class="tools">
+      <span class="pill" title="Poin permainan">⭐ <b id="pts">0</b></span>
+      <button class="ibtn" id="btnMenu" aria-label="Menu bagian">☰ Menu</button>
+      <button class="ibtn" id="btnSound" aria-label="Suara aktif atau nonaktif">🔊</button>
+    </div>
+  </div>
+  <div class="progwrap"><div class="progress"><i id="bar"></i></div><span class="proglabel" id="progLabel">1 / 8</span></div>
+
+  <div class="guide" id="guide">
+    <div class="av">👧</div>
+    <div class="bubble" id="bubble">...</div>
+  </div>
+
+  <!-- 1. BERANDA -->
+  <section class="page cover" id="p0">
+    <h1>RUMAH ATURAN INTERAKTIF</h1>
+    <div class="sub">Ayo Jadi Anak Tertib!</div>
+    <div class="scene"><span class="sun">☀️</span><span class="cloud">☁️</span><span class="tree t1">🌳</span><span class="homeic">🏠</span><span class="tree t2">🌷</span></div>
+    <div class="family"><span>👨</span><span>👩</span><span>👦</span><span>👧</span><span>👶</span></div>
+    <div class="panel"><b>Halo, anak hebat! Yuk, kita belajar mengenal aturan yang baik di rumah!</b></div>
+    <div class="panel">
+      <label for="namaAwal"><b>✏️ Siapa namamu?</b></label>
+      <input type="text" id="namaAwal" placeholder="Tulis namamu di sini" maxlength="30" autocomplete="off">
+    </div>
+    <div class="btnrow">
+      <button class="btn" id="btnStart">▶ MULAI BELAJAR</button>
+      <button class="btn orange" id="btnHelp">❓ PETUNJUK</button>
+    </div>
+  </section>
+
+  <!-- 2. TUJUAN PEMBELAJARAN -->
+  <section class="page" id="p1">
+    <h2>🎯 Tujuan Belajar Kita</h2>
+    <div class="grid g2">
+      <div class="tile c1"><span class="ic">👀🛏️</span>Mengenal contoh aturan di rumah</div>
+      <div class="tile c2"><span class="ic">💖🏡</span>Mengetahui manfaat mematuhi aturan</div>
+      <div class="tile c3"><span class="ic">👍🧒</span>Memilih perilaku yang baik</div>
+      <div class="tile c4"><span class="ic">✅❌</span>Membedakan perilaku yang sesuai dan tidak sesuai aturan</div>
+    </div>
+    <div class="btnrow"><button class="btn" data-go="2">🚀 AYO MULAI!</button></div>
+  </section>
+
+  <!-- 3. MARI BELAJAR: MENGENAL ATURAN DI RUMAH -->
+  <section class="page" id="p2">
+    <h2>📖 Mari Belajar: Mengenal Aturan di Rumah</h2>
+    <div class="defn">Aturan di rumah adalah kebiasaan atau kesepakatan yang harus kita lakukan bersama keluarga agar rumah menjadi tertib, aman, dan nyaman.</div>
+    <p class="center"><b>Ketuk kartu untuk melihat penjelasan! <span id="seenCnt">(0/6)</span></b></p>
+    <div class="grid g3" id="ruleCards"></div>
+    <div class="detail" id="ruleDetail">👆 Ketuk salah satu kartu di atas.</div>
+  </section>
+
+  <!-- 4. JELAJAH RUMAH -->
+  <section class="page" id="p3">
+    <h2>🔍 Jelajah Rumah</h2>
+    <p class="center"><b>Ketuk sebuah ruangan! <span id="roomCnt">(0/4)</span></b></p>
+    <div class="house">
+      <div class="roof"></div>
+      <div class="rooms">
+        <button class="room rm1" data-room="kamar"><span class="ic">🛏️</span>Kamar Tidur</button>
+        <button class="room rm2" data-room="makan"><span class="ic">🍽️</span>Ruang Makan</button>
+        <button class="room rm3" data-room="keluarga"><span class="ic">🛋️</span>Ruang Keluarga</button>
+        <button class="room rm4" data-room="belajar"><span class="ic">📚</span>Tempat Belajar</button>
+      </div>
+    </div>
+    <div class="panel" id="roomPanel" style="display:none"></div>
+  </section>
+
+  <!-- 5. MANFAAT MEMATUHI ATURAN -->
+  <section class="page" id="p4">
+    <h2>💖 Manfaat Mematuhi Aturan</h2>
+    <p class="center"><b>Ketuk kartu manfaat! <span id="benCnt">(0/4)</span></b></p>
+    <div class="grid g2" id="benefits"></div>
+    <div class="panel"><div id="benefitQ"></div></div>
+  </section>
+
+  <!-- 6. AYO BERMAIN -->
+  <section class="page" id="p5">
+    <h2>🎮 Ayo Bermain!</h2>
+    <div class="tabs" role="tablist" id="gameTabs">
+      <button class="tab" role="tab" data-tab="0" id="tab0">🖼️ Permainan 1<small>Pilih Perilaku yang Baik</small></button>
+      <button class="tab" role="tab" data-tab="1" id="tab1">🗂️ Permainan 2<small>Ayo Pilah Perilaku!</small></button>
+      <button class="tab" role="tab" data-tab="2" id="tab2">🔗 Permainan 3<small>Pasangkan Aturan dan Manfaatnya</small></button>
+    </div>
+
+    <div class="gpane panel" id="gp0">
+      <div id="g1"></div><div class="btnrow" id="g1next"></div>
+    </div>
+
+    <div class="gpane panel center" id="gp1">
+      <div class="q">Kelompokkan perilaku: mematuhi aturan atau tidak mematuhi aturan.</div>
+      <div class="notice">🌐 Permainan ini memerlukan koneksi internet. Jika kotak permainan kosong, ketuk MUAT ULANG PERMAINAN atau BUKA DI TAB BARU.</div>
+      <div class="notice" id="wwNote" hidden></div>
+      <div class="wwbox" id="wwBox"></div>
+      <div class="btnrow">
+        <button class="btn orange" id="wwReload">🔄 MUAT ULANG PERMAINAN</button>
+        <a class="btn blue" id="wwOpen" href="https://wordwall.net/embed/511ac66bf95f4b2a856b9a0f4e18238a?themeId=1&amp;templateId=2&amp;fontStackId=0" target="_blank" rel="noopener">↗ BUKA DI TAB BARU</a>
+        <button class="btn" id="wwNext">PERMAINAN 3 ▶</button>
+      </div>
+    </div>
+
+    <div class="gpane panel" id="gp2">
+      <p class="center"><b>Pilih manfaat yang cocok untuk setiap aturan.</b></p>
+      <div id="g3rows"></div>
+      <div class="fb" id="g3fb"></div>
+      <div class="btnrow">
+        <button class="btn" id="g3check">✔ PERIKSA JAWABAN</button>
+        <button class="btn orange" id="g3reset">🔄 MAIN LAGI</button>
+        <button class="btn blue" id="g3next">EVALUASI ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. EVALUASI -->
+  <section class="page" id="p6">
+    <h2>📝 Evaluasi: Ayo Uji Kemampuanmu!</h2>
+    <div class="center"><span class="pill">Nilai: <b id="qScore">0</b></span></div>
+    <div class="panel" id="quizBox"></div>
+    <div class="btnrow" id="quizOnline"></div>
+  </section>
+
+  <!-- 8. REFLEKSI DAN PENUTUP -->
+  <section class="page" id="p7">
+    <h2>💭 Refleksi dan Penutup</h2>
+
+    <h3 class="sec">1. Refleksi</h3>
+    <div class="panel">
+      <div class="rq"><label for="r1">1. Sebutkan satu aturan yang kamu lakukan di rumah.</label>
+        <input type="text" id="r1" placeholder="Tulis di sini..." maxlength="60" autocomplete="off">
+        <div class="chips" data-for="r1"><button class="chip">Merapikan tempat tidur</button><button class="chip">Mencuci tangan</button><button class="chip">Merapikan mainan</button></div></div>
+      <div class="rq"><label for="r2">2. Mengapa kita harus mematuhi aturan di rumah?</label>
+        <input type="text" id="r2" placeholder="Tulis di sini..." maxlength="80" autocomplete="off">
+        <div class="chips" data-for="r2"><button class="chip">Agar rumah rapi</button><button class="chip">Agar keluarga rukun</button><button class="chip">Agar kita disiplin</button></div></div>
+      <div class="rq"><label for="r3">3. Aturan apa yang akan kamu lakukan mulai hari ini?</label>
+        <input type="text" id="r3" placeholder="Tulis di sini..." maxlength="60" autocomplete="off">
+        <div class="chips" data-for="r3" data-promise="1"><button class="chip">merapikan tempat tidur</button><button class="chip">mencuci tangan sebelum makan</button><button class="chip">meminta izin sebelum bermain</button><button class="chip">belajar sesuai jadwal</button></div></div>
+    </div>
+
+    <h3 class="sec">2. Kartu Janji Anak Tertib</h3>
+    <div class="panel">
+      <div class="rq"><label for="nama">Namaku:</label><input type="text" id="nama" placeholder="Tulis namamu" maxlength="30" autocomplete="off"></div>
+      <div class="rq"><label for="promise">Aku berjanji akan ................................ di rumah.</label>
+        <input type="text" id="promise" placeholder="contoh: merapikan mainan" maxlength="60" autocomplete="off"></div>
+      <div class="fb" id="pfb"></div>
+      <div class="btnrow"><button class="btn purple" id="mkCard">🎖️ BUAT KARTU JANJI</button></div>
+      <div id="promiseCard"></div>
+      <div class="btnrow"><button class="btn blue" id="prn" hidden>🖨️ CETAK KARTU</button></div>
+    </div>
+
+    <h3 class="sec">3. Penutup</h3>
+    <div class="center">
+      <div class="family"><span>👨</span><span>👩</span><span>👦</span><span>👧</span><span>👶</span></div>
+      <div style="font-size:clamp(60px,12vw,110px)">🏡💖</div>
+      <div class="stars" id="finalStars"></div>
+    </div>
+    <div class="panel center"><b>Hebat! Kamu sudah belajar mengenal aturan di rumah. Yuk, lakukan aturan baik setiap hari agar rumah kita selalu rapi, aman, dan nyaman!</b>
+      <p>⭐ Poin permainan: <b id="finalPts">0</b> &nbsp; 📝 Nilai kuis: <b id="finalQ">-</b></p></div>
+    <div class="panel recap" id="recap"></div>
+    <div class="btnrow">
+      <button class="btn orange" id="btnRepeat">🔁 ULANGI BELAJAR</button>
+      <button class="btn blue" id="btnHome2">🏠 KEMBALI KE BERANDA</button>
+    </div>
+  </section>
+
+  <div class="foot">Media pembelajaran Pendidikan Pancasila Kelas I (Fase A) • Bab 2 Aku Patuh pada Aturan • Pengembang: Nailan I. Lahilote</div>
+</div>
+
+<div class="nav" id="nav">
+  <button class="btn blue" id="btnPrev">◀ KEMBALI</button>
+  <button class="btn orange" id="btnHome">🏠 BERANDA</button>
+  <button class="btn" id="btnNext">LANJUT ▶</button>
+</div>
+
+<div id="modal"><div class="box"><div id="modalBody"></div><div class="btnrow"><button class="btn" id="modalClose">OKE, MENGERTI!</button></div></div></div>
+<div id="printOnly"></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+function h(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ===== KONFIGURASI ===== */
+var WW_EMBED="https://wordwall.net/embed/511ac66bf95f4b2a856b9a0f4e18238a?themeId=1&templateId=2&fontStackId=0";
+var QUIZ_ONLINE="";   /* tempel tautan kuis online (Educaplay dll.) di sini. Jika kosong, tombol tidak tampil. */
+var MAX={room:20,benefit:5,g1:40,g3:20};
+
+/* ===== STATE ===== */
+var TOTAL=8;
+var cur=0,awarded={},quizScore=0,qCorrect=0,qi=0,quizDone=false;
+var seenRule={},seenBen={},seenRoom={},g1r=0,g3done=false,curTab=0,studentName="";
+var GUIDE=[
+ "Halo! Aku Nina. Ayo belajar bersamaku!",
+ "Ini yang akan kita pelajari hari ini.",
+ "Ketuk kartu gambar untuk tahu aturannya!",
+ "Ayo jelajahi rumah! Ketuk ruangannya.",
+ "Mematuhi aturan membuat banyak hal baik.",
+ "Ayo bermain! Pilih permainan di atas.",
+ "Ayo jawab soal! Kamu pasti bisa!",
+ "Tulis janjimu, lalu lihat hasil belajarmu."
+];
+var TABGUIDE=["Pilih gambar anak yang baik ya!","Kelompokkan perilaku dengan benar ya!","Pasangkan aturan dengan manfaatnya."];
+var NAMES=["Beranda","Tujuan Pembelajaran","Mari Belajar: Mengenal Aturan","Jelajah Rumah","Manfaat Mematuhi Aturan","Ayo Bermain!","Evaluasi","Refleksi dan Penutup"];
+
+function points(){var s=0;for(var k in awarded)s+=awarded[k];return s}
+function sk(p){var t=0;for(var k in awarded)if(k.indexOf(p)===0)t+=awarded[k];return t}
+function award(key,n){if(awarded[key]==null){awarded[key]=n;updPts()}}
+function updPts(){$("#pts").textContent=points()}
+function cnt(o){return Object.keys(o).length}
+function setBubble(t){$("#bubble").textContent=t}
+
+/* ===== SUARA (efek bunyi) ===== */
+var sound=true,ac=null;
+function tone(fr,d){
+  if(!sound)return;
+  try{
+    ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    var t=ac.currentTime;
+    fr.forEach(function(f,i){
+      var o=ac.createOscillator(),g=ac.createGain();
+      o.type="sine";o.frequency.value=f;
+      g.gain.setValueAtTime(.15,t+i*d);g.gain.exponentialRampToValueAtTime(.001,t+i*d+d);
+      o.connect(g);g.connect(ac.destination);o.start(t+i*d);o.stop(t+i*d+d);
+    });
+  }catch(e){}
+}
+var sfx={ok:function(){tone([523,659,784],.12)},bad:function(){tone([260,200],.16)},click:function(){tone([600],.05)}};
+$("#btnSound").onclick=function(){
+  sound=!sound;this.textContent=sound?"🔊":"🔇";
+  if(sound)sfx.click();
+};
+document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("button")&&!e.target.closest(".opt")){sfx.click()}});
+
+/* ===== EFEK ===== */
+function burst(){
+  var em=["⭐","🌟","🎉","✨","💖","🎈"];
+  for(var i=0;i<14;i++){
+    var s=h("span","conf",em[i%em.length]);
+    s.style.left=(Math.random()*95)+"vw";
+    s.style.animationDelay=(Math.random()*.5)+"s";
+    document.body.appendChild(s);
+    (function(x){setTimeout(function(){x.remove()},2600)})(s);
+  }
+}
+
+/* ===== MODAL ===== */
+function modal(html){$("#modalBody").innerHTML=html;$("#modal").classList.add("show")}
+$("#modalClose").onclick=function(){$("#modal").classList.remove("show")};
+$("#modal").onclick=function(e){if(e.target===this)this.classList.remove("show")};
+function help(){
+  modal("<h2>❓ Petunjuk</h2><ol>"+
+   "<li>Ketuk tombol warna-warni untuk bermain.</li>"+
+   "<li>Tombol <b>LANJUT</b> dan <b>KEMBALI</b> ada di bawah layar.</li>"+
+   "<li>Tombol <b>BERANDA</b> membawamu ke halaman awal.</li>"+
+   "<li>Tombol <b>MENU</b> membuka daftar bagian belajar.</li>"+
+   "<li>Pilih jawaban yang benar. Jika salah, coba lagi!</li>"+
+   "<li>Jawaban benar memberi kamu <b>⭐ poin</b>.</li>"+
+   "<li>Tombol 🔊 untuk menyalakan atau mematikan bunyi.</li></ol>");
+}
+$("#btnHelp").onclick=help;
+$("#btnMenu").onclick=function(){
+  var g=NAMES.map(function(n,i){return '<button class="btn '+(i===cur?"orange":"blue")+'" data-m="'+i+'">'+(i+1)+'. '+n+'</button>'}).join("");
+  modal("<h2>☰ Menu Bagian</h2><div class='menugrid'>"+g+"</div>");
+  $$("#modalBody [data-m]").forEach(function(b){b.onclick=function(){$("#modal").classList.remove("show");go(+b.getAttribute("data-m"))}});
+};
+
+/* ===== NAMA SISWA (satu sumber untuk semua tempat) ===== */
+function setName(v,from){
+  studentName=v;
+  ["#namaAwal","#nama"].forEach(function(id){var e=$(id);if(e!==from)e.value=v});
+}
+$("#namaAwal").addEventListener("input",function(){setName(this.value,this)});
+$("#nama").addEventListener("input",function(){setName(this.value,this)});
+function theName(){return studentName.trim()||"Anak Hebat"}
+
+/* ===== NAVIGASI ===== */
+function go(n){
+  if(n<0||n>=TOTAL)return;
+  cur=n;
+  $$(".page").forEach(function(p,i){p.classList.toggle("active",i===n)});
+  $("#bar").style.width=((n+1)/TOTAL*100)+"%";
+  $("#progLabel").textContent=(n+1)+" / "+TOTAL;
+  setBubble(n===5?TABGUIDE[curTab]:GUIDE[n]);
+  $("#nav").style.display=(n===0)?"none":"flex";
+  $("#btnPrev").disabled=(n===0);
+  $("#btnNext").style.visibility=(n===TOTAL-1)?"hidden":"visible";
+  if(n===5)showTab(curTab);
+  if(n===7)closing();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+$("#btnPrev").onclick=function(){go(cur-1)};
+$("#btnNext").onclick=function(){go(cur+1)};
+$("#btnHome").onclick=function(){go(0)};
+$("#btnHome2").onclick=function(){go(0)};
+$("#btnStart").onclick=function(){go(1)};
+$$("[data-go]").forEach(function(b){b.onclick=function(){go(+b.getAttribute("data-go"))}});
+
+/* ===== PILIHAN GANDA UMUM ===== */
+function mc(el,cfg){
+  var list=cfg.shuffle===false?cfg.opts.slice():shuffle(cfg.opts);
+  el.innerHTML="";
+  var od=h("div","opts"),fb=h("div","fb");
+  el.appendChild(h("div","q",cfg.q));el.appendChild(od);el.appendChild(fb);
+  var tries=0,done=false;
+  list.forEach(function(o,i){
+    var b=h("button","opt");
+    b.innerHTML=(cfg.letters?'<span class="ltr">'+"ABCD"[i]+'</span>':"")+(o.i?'<span class="big">'+o.i+'</span>':"")+'<span>'+o.t+'</span>';
+    b.onclick=function(){
+      if(done||b.disabled)return;
+      tries++;
+      if(o.ok){
+        done=true;b.classList.add("good");
+        Array.prototype.forEach.call(od.children,function(x){x.disabled=true});
+        fb.className="fb ok";fb.textContent=cfg.okMsg||"Hebat! Jawabanmu benar! 🎉";
+        sfx.ok();burst();
+        if(cfg.onDone)cfg.onDone(true,tries);
+      }else{
+        b.classList.add("bad");sfx.bad();
+        fb.className="fb no";fb.textContent=cfg.noMsg||"Yuk, coba lagi! 💪";
+        if(cfg.retry===false){
+          done=true;
+          Array.prototype.forEach.call(od.children,function(x,k){x.disabled=true;if(list[k].ok)x.classList.add("good")});
+          var right=list.filter(function(z){return z.ok})[0].t;
+          fb.textContent=(cfg.noMsg||"Belum tepat.")+" Jawaban benar: "+right;
+          if(cfg.onDone)cfg.onDone(false,tries);
+        }else{b.disabled=true}
+      }
+    };
+    od.appendChild(b);
+  });
+}
+
+/* ===== 3. MENGENAL ATURAN ===== */
+var RULES=[
+ {i:"⏰",t:"Bangun tidur tepat waktu",x:"Kita bangun pagi agar tidak terlambat ke sekolah.",c:"c1"},
+ {i:"🛏️",t:"Merapikan tempat tidur setelah bangun",x:"Selimut dilipat, bantal ditata. Kamar jadi rapi.",c:"c2"},
+ {i:"🧼",t:"Mencuci tangan sebelum makan",x:"Tangan bersih, kuman pergi, badan jadi sehat.",c:"c3"},
+ {i:"🙋",t:"Meminta izin kepada orang tua sebelum bermain di luar",x:"Orang tua tahu kita di mana. Kita jadi aman.",c:"c4"},
+ {i:"📚",t:"Belajar sesuai jadwal",x:"Belajar rutin membuat kita makin pintar.",c:"c5"},
+ {i:"🧸",t:"Merapikan mainan setelah digunakan",x:"Mainan disimpan di kotak. Rumah rapi dan aman.",c:"c6"}
+];
+function initRules(){
+  var box=$("#ruleCards");box.innerHTML="";
+  $("#ruleDetail").innerHTML="👆 Ketuk salah satu kartu di atas.";
+  $("#seenCnt").textContent="(0/6)";
+  RULES.forEach(function(r,i){
+    var b=h("button","tile "+r.c,'<span class="ic">'+r.i+'</span>'+(i+1)+'. '+r.t);
+    b.onclick=function(){
+      seenRule[i]=1;b.classList.add("seen");
+      var d=$("#ruleDetail");d.style.animation="none";void d.offsetWidth;d.style.animation="";
+      d.innerHTML='<div style="font-size:3em">'+r.i+'</div><b>'+r.t+'</b><br>'+r.x;
+      $("#seenCnt").textContent="("+cnt(seenRule)+"/6)";
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ===== 4. JELAJAH RUMAH ===== */
+var ROOMS={
+ kamar:{n:"Kamar Tidur",s:"🧒🛏️🧸",r:[["⏰","Bangun tidur tepat waktu."],["🛏️","Merapikan tempat tidur."],["👕","Menyimpan pakaian pada tempatnya."]],
+   q:"Pakaian bersih disimpan di ....",o:[{i:"👚🚪",t:"Lemari",ok:true},{i:"🧦🟫",t:"Lantai"},{i:"🛏️⬇️",t:"Kolong tempat tidur"}]},
+ makan:{n:"Ruang Makan",s:"👨‍👩‍👦🍽️🥗",r:[["🧼","Mencuci tangan sebelum makan."],["🍚","Makan dengan tertib."],["🚫🧸","Tidak bermain ketika makan."]],
+   q:"Saat makan, kita harus ....",o:[{i:"🧒🍚",t:"Makan dengan tertib",ok:true},{i:"🏃💨",t:"Berlari-lari"},{i:"🚗🧸",t:"Bermain mobil-mobilan"}]},
+ keluarga:{n:"Ruang Keluarga",s:"👩🧒🛋️🧸",r:[["🙋","Meminta izin sebelum bermain di luar rumah."],["🧸","Merapikan mainan setelah digunakan."],["🏺","Menjaga barang-barang di rumah."]],
+   q:"Setelah bermain, mainan harus ....",o:[{i:"🧸📦",t:"Dirapikan",ok:true},{i:"🧸🌪️",t:"Dibiarkan berserakan"},{i:"🧸🗑️",t:"Dilempar"}]},
+ belajar:{n:"Tempat Belajar",s:"🧒📚✏️🪑",r:[["📅","Belajar sesuai jadwal."],["🎒","Menyiapkan buku dan alat tulis."],["🤫","Menjaga ketenangan ketika belajar."]],
+   q:"Saat belajar, kita harus ....",o:[{i:"🤫📖",t:"Tenang",ok:true},{i:"📢",t:"Berteriak"},{i:"🏃",t:"Berlari-lari"}]}
+};
+function initRooms(){
+  $$(".room").forEach(function(b){
+    b.onclick=function(){
+      var k=b.getAttribute("data-room"),R=ROOMS[k];
+      $$(".room").forEach(function(x){x.classList.remove("on")});b.classList.add("on");
+      seenRoom[k]=1;b.classList.add("visited");$("#roomCnt").textContent="("+cnt(seenRoom)+"/4)";
+      var p=$("#roomPanel");p.style.display="block";
+      p.innerHTML='<h2>'+R.n+'</h2><div class="roomscene">'+R.s+'</div><ul class="rules">'+
+        R.r.map(function(x){return '<li><span>'+x[0]+'</span>'+x[1]+'</li>'}).join("")+'</ul><div id="roomQ"></div>';
+      mc($("#roomQ"),{q:R.q,opts:R.o,okMsg:"Benar! Kamu hebat! 🎉",noMsg:"Yuk, coba lagi!",
+        onDone:function(ok,t){award("room_"+k,t===1?5:3)}});
+      p.scrollIntoView({behavior:"smooth",block:"start"});
+    };
+  });
+}
+function resetRooms(){
+  seenRoom={};$("#roomCnt").textContent="(0/4)";
+  $("#roomPanel").style.display="none";$("#roomPanel").innerHTML="";
+  $$(".room").forEach(function(x){x.classList.remove("on");x.classList.remove("visited")});
+}
+
+/* ===== 5. MANFAAT ===== */
+function initBenefit(){
+  var B=[{i:"🏡✨",t:"Rumah menjadi rapi",c:"c3"},{i:"👨‍👩‍👧‍👦💞",t:"Keluarga hidup rukun",c:"c1"},{i:"⏰✅",t:"Kegiatan di rumah menjadi tertib",c:"c5"},{i:"💪🌟",t:"Melatih sikap disiplin dan tanggung jawab",c:"c4"}];
+  var box=$("#benefits");box.innerHTML="";$("#benCnt").textContent="(0/4)";
+  B.forEach(function(b,i){
+    var t=h("button","tile "+b.c,'<span class="ic">'+b.i+'</span>'+(i+1)+'. '+b.t);
+    t.onclick=function(){
+      seenBen[i]=1;t.classList.add("seen");$("#benCnt").textContent="("+cnt(seenBen)+"/4)";
+      t.style.animation="zoom .5s";setTimeout(function(){t.style.animation=""},500);
+    };
+    box.appendChild(t);
+  });
+  mc($("#benefitQ"),{q:"Apa yang terjadi jika kita selalu merapikan tempat tidur?",
+    opts:[{i:"🛏️✨",t:"Kamar menjadi rapi",ok:true},{i:"🌪️🛏️",t:"Kamar menjadi berantakan"},{i:"🌑",t:"Kamar menjadi gelap"}],
+    okMsg:"Benar! Kamar menjadi rapi dan nyaman! 🎉",noMsg:"Yuk, coba lagi! Pikirkan lagi ya.",
+    onDone:function(ok,t){award("benefit",t===1?5:3)}});
+}
+
+/* ===== 6. AYO BERMAIN ===== */
+function showTab(i){
+  curTab=i;
+  $$(".tab").forEach(function(t,k){t.setAttribute("aria-selected",k===i?"true":"false")});
+  $$(".gpane").forEach(function(p,k){p.classList.toggle("on",k===i)});
+  if(cur===5)setBubble(TABGUIDE[i]);
+  if(i===1)loadWW(false);
+  updTabs();
+}
+function updTabs(){
+  $("#tab0").firstChild.nodeValue=(g1r>=G1.length?"✅ ":"🖼️ ")+"Permainan 1";
+  $("#tab2").firstChild.nodeValue=(g3done?"✅ ":"🔗 ")+"Permainan 3";
+}
+$$(".tab").forEach(function(t){t.onclick=function(){showTab(+t.getAttribute("data-tab"))}});
+
+/* Permainan 1 */
+var G1=[
+ {q:"Setelah bangun tidur, mana yang baik?",o:[{i:"🧒🛏️✨",t:"Anak merapikan tempat tidur",ok:true},{i:"😴🛏️🧦",t:"Tempat tidur dibiarkan berantakan"},{i:"🤸🛏️",t:"Anak melompat-lompat di tempat tidur"}]},
+ {q:"Mau makan. Mana yang baik?",o:[{i:"🧒🧼🚿",t:"Anak mencuci tangan sebelum makan",ok:true},{i:"🧒🍛",t:"Anak langsung makan tanpa cuci tangan"},{i:"🧒🚗🍚",t:"Anak bermain saat makan"}]},
+ {q:"Mau bermain di luar. Mana yang baik?",o:[{i:"🧒🗣️👩",t:"Anak meminta izin kepada ibu",ok:true},{i:"🏃💨🚪",t:"Anak pergi diam-diam"},{i:"🙈🚪",t:"Anak tidak memberi tahu siapa pun"}]},
+ {q:"Waktunya belajar. Mana yang baik?",o:[{i:"🧒📚✏️",t:"Anak belajar sesuai jadwal",ok:true},{i:"🧒🎮",t:"Anak terus bermain gim"},{i:"🧒📺",t:"Anak menonton TV terus"}]}
+];
+function g1Show(){
+  $("#g1next").innerHTML="";
+  var g=$("#g1");
+  if(g1r>=G1.length){
+    var sc=sk("g1_");
+    g.innerHTML='<div class="qicon">🏅</div><div class="q">Permainan 1 selesai! Kamu mendapat '+sc+' poin dari '+MAX.g1+'.</div>';
+    $("#g1next").innerHTML='<button class="btn orange" id="g1again">🔄 MAIN LAGI</button><button class="btn" id="g1go">PERMAINAN 2 ▶</button>';
+    $("#g1again").onclick=function(){g1Reset();g1Show();updTabs()};
+    $("#g1go").onclick=function(){showTab(1)};
+    updTabs();
+    return;
+  }
+  var R=G1[g1r],idx=g1r;
+  g.innerHTML='<div class="qprog">Gambar '+(idx+1)+' dari '+G1.length+'</div><div id="g1mc"></div>';
+  mc($("#g1mc"),{q:R.q,opts:R.o,okMsg:"Hebat! Kamu memilih perilaku yang baik! ⭐",noMsg:"Yuk, coba lagi! Perhatikan gambarnya dengan teliti.",
+    onDone:function(ok,t){
+      award("g1_"+idx,t===1?10:5);
+      var b=h("button","btn",idx===G1.length-1?"LIHAT HASIL 🏆":"GAMBAR BERIKUTNYA ▶");
+      b.onclick=function(){g1r=idx+1;g1Show()};
+      $("#g1next").appendChild(b);
+    }});
+}
+function g1Reset(){for(var i=0;i<G1.length;i++)delete awarded["g1_"+i];updPts();g1r=0}
+
+/* Permainan 2: Wordwall */
+var wwLoaded=false,wwTimer=null;
+function wwMsg(t){var n=$("#wwNote");n.textContent=t;n.hidden=!t}
+function loadWW(force){
+  var box=$("#wwBox");
+  if(wwLoaded&&!force)return;
+  if(!navigator.onLine){
+    box.innerHTML="";
+    wwMsg("📵 Tidak ada koneksi internet. Permainan ini baru bisa dimainkan setelah internet menyala. Ketuk MUAT ULANG PERMAINAN jika internet sudah menyala.");
+    return;
+  }
+  box.innerHTML="";wwLoaded=false;clearTimeout(wwTimer);
+  wwMsg("⏳ Sedang memuat permainan...");
+  var f=document.createElement("iframe");
+  f.id="wwGame";f.title="Ayo Pilah Perilaku";f.setAttribute("allowfullscreen","");f.setAttribute("loading","eager");
+  f.onload=function(){wwLoaded=true;clearTimeout(wwTimer);wwMsg("")};
+  f.src=WW_EMBED;
+  box.appendChild(f);
+  wwTimer=setTimeout(function(){
+    if(!wwLoaded)wwMsg("⚠️ Permainan belum tampil. Periksa internet, lalu ketuk MUAT ULANG PERMAINAN atau BUKA DI TAB BARU.");
+  },10000);
+}
+function wwReset(){clearTimeout(wwTimer);wwLoaded=false;$("#wwBox").innerHTML="";wwMsg("")}
+$("#wwReload").onclick=function(){loadWW(true)};
+$("#wwNext").onclick=function(){showTab(2)};
+window.addEventListener("online",function(){if(cur===5&&curTab===1)loadWW(true)});
+window.addEventListener("offline",function(){if(cur===5&&curTab===1&&!wwLoaded)loadWW(false)});
+
+/* Permainan 3 */
+var G3=[
+ {i:"🛏️",r:"Merapikan tempat tidur",m:"Kamar menjadi rapi"},
+ {i:"🧼",r:"Mencuci tangan sebelum makan",m:"Tangan menjadi bersih"},
+ {i:"🙋",r:"Meminta izin sebelum bermain",m:"Orang tua mengetahui kegiatan kita"},
+ {i:"📚",r:"Belajar sesuai jadwal",m:"Melatih disiplin"}
+];
+function g3Init(){
+  G3.forEach(function(p,i){delete awarded["g3_"+i]});g3done=false;updPts();
+  var box=$("#g3rows");box.innerHTML="";
+  var opts=shuffle(G3.map(function(x){return x.m}));
+  G3.forEach(function(p,i){
+    var row=h("div","pair",'<div class="rule"><span class="ic">'+p.i+'</span>'+p.r+'</div><div class="arr">➡️</div>'+
+      '<select id="s'+i+'" aria-label="Manfaat untuk '+p.r+'"><option value="">Pilih manfaat...</option>'+opts.map(function(o){return '<option>'+o+'</option>'}).join("")+'</select><div class="mark" id="m'+i+'"></div>');
+    box.appendChild(row);
+  });
+  $("#g3fb").textContent="";$("#g3fb").className="fb";
+  updTabs();
+}
+function g3Check(){
+  var n=0,empty=0;
+  G3.forEach(function(p,i){
+    var v=$("#s"+i).value,m=$("#m"+i);
+    if(!v){m.textContent="❔";empty++;return}
+    if(v===p.m){m.textContent="✅";n++;award("g3_"+i,5)}else{m.textContent="❌"}
+  });
+  var fb=$("#g3fb");
+  if(empty){fb.className="fb no";fb.textContent="Pilih semua jawaban dulu ya! ("+n+" benar)";sfx.bad();return}
+  if(n===G3.length){fb.className="fb ok";fb.textContent="Hebat! Semua pasangan benar! 🎉";g3done=true;sfx.ok();burst();updTabs()}
+  else{fb.className="fb no";fb.textContent=n+" benar dari "+G3.length+". Yuk, coba lagi yang ❌!";sfx.bad()}
+}
+$("#g3check").onclick=g3Check;
+$("#g3reset").onclick=g3Init;
+$("#g3next").onclick=function(){go(6)};
+
+/* ===== 7. EVALUASI ===== */
+var QZ=[
+ {i:"🛏️",q:"Setelah bangun tidur, kita sebaiknya ....",o:["Merapikan tempat tidur","Membiarkan tempat tidur berantakan","Melempar bantal","Tidur lagi tanpa merapikan"],a:0},
+ {i:"🍽️",q:"Sebelum makan, kita harus ....",o:["Bermain dahulu","Mencuci tangan","Tidur","Berlari-lari"],a:1},
+ {i:"🚪",q:"Sebelum bermain di luar rumah, kita harus ....",o:["Pergi diam-diam","Tidak memberi tahu siapa pun","Meminta izin kepada orang tua","Langsung berlari ke luar"],a:2},
+ {i:"🏡",q:"Salah satu manfaat mematuhi aturan di rumah adalah ....",o:["Rumah menjadi berantakan","Keluarga menjadi bertengkar","Kegiatan menjadi tidak teratur","Rumah menjadi rapi dan nyaman"],a:3},
+ {i:"📚",q:"Ketika waktunya belajar, kita sebaiknya ....",o:["Belajar sesuai jadwal","Terus bermain","Mengganggu adik","Menonton TV terus"],a:0},
+ {i:"🧸",q:"Ketika selesai bermain, kita sebaiknya ....",o:["Membiarkan mainan berserakan","Merapikan kembali mainan","Melempar mainan"],a:1},
+ {i:"🌟",q:"Anak yang mematuhi aturan di rumah akan menjadi anak yang ....",o:["Disiplin dan bertanggung jawab","Suka melanggar aturan","Tidak peduli terhadap aturan"],a:0}
+];
+function quizShow(){
+  var box=$("#quizBox");
+  $("#qScore").textContent=quizScore;
+  if(qi>=QZ.length){
+    quizDone=true;
+    var m;
+    if(quizScore===100){m="Luar biasa! Kamu anak tertib sejati! 🏆"}
+    else if(quizScore>=80){m="Hebat! Kamu sudah sangat paham! 🌟"}
+    else if(quizScore>=60){m="Bagus! Ayo belajar lagi biar makin pintar! 👍"}
+    else{m="Ayo semangat! Coba lagi ya, kamu pasti bisa! 💪"}
+    box.innerHTML='<div class="qprog">Skor Akhirmu ('+qCorrect+' benar dari '+QZ.length+' soal)</div><div class="bigscore">'+quizScore+'</div><div class="q">'+m+'</div>'+
+      '<div class="btnrow"><button class="btn orange" id="qagain">🔄 ULANGI KUIS</button><button class="btn" id="qgo">LANJUT ▶</button></div>';
+    $("#qagain").onclick=function(){quizReset();quizShow()};
+    $("#qgo").onclick=function(){go(7)};
+    if(quizScore>=60)burst();
+    return;
+  }
+  var Q=QZ[qi],idx=qi;
+  box.innerHTML='<div class="qprog">Soal '+(idx+1)+' dari '+QZ.length+'</div><div class="qicon">'+Q.i+'</div><div id="qmc"></div><div class="btnrow" id="qnext"></div>';
+  mc($("#qmc"),{q:(idx+1)+". "+Q.q,opts:Q.o.map(function(t,k){return {t:t,ok:k===Q.a}}),shuffle:false,retry:false,letters:true,
+    okMsg:"Benar! Hebat! 🎉",noMsg:"Belum tepat.",
+    onDone:function(ok){
+      if(ok){qCorrect++;quizScore=Math.round(qCorrect*100/QZ.length);$("#qScore").textContent=quizScore}
+      var b=h("button","btn",idx===QZ.length-1?"LIHAT SKOR 🏆":"SOAL BERIKUTNYA ▶");
+      b.onclick=function(){qi=idx+1;quizShow()};
+      $("#qnext").appendChild(b);
+    }});
+}
+function quizReset(){qi=0;quizScore=0;qCorrect=0;quizDone=false}
+
+/* ===== 8. REFLEKSI, KARTU JANJI, PENUTUP ===== */
+function initReflect(){
+  $$(".chips").forEach(function(c){
+    var tgt=c.getAttribute("data-for"),pr=c.getAttribute("data-promise");
+    Array.prototype.forEach.call(c.querySelectorAll(".chip"),function(b){
+      b.onclick=function(){
+        $("#"+tgt).value=b.textContent;
+        if(pr)$("#promise").value=b.textContent;
+      };
+    });
+  });
+  $("#mkCard").onclick=function(){
+    var p=$("#promise").value.trim(),fb=$("#pfb");
+    if(!p){fb.className="fb no";fb.textContent="Tulis janjimu dulu ya! ✏️";sfx.bad();return}
+    fb.textContent="";
+    var tgl=new Date().toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+    var card='<div class="promise"><div class="big">🏠⭐</div><h3>KARTU JANJI ANAK TERTIB</h3>'+
+      '<div class="txt">Aku berjanji akan <u>'+esc(p)+'</u> di rumah.</div>'+
+      '<div><b>— '+esc(theName())+' —</b></div><div style="font-size:.7em">'+tgl+'</div><div class="big">🌈👏</div></div>';
+    $("#promiseCard").innerHTML=card;
+    $("#printOnly").innerHTML=card;
+    $("#prn").hidden=false;
+    sfx.ok();burst();
+    $("#promiseCard").scrollIntoView({behavior:"smooth",block:"center"});
+  };
+  $("#prn").onclick=function(){window.print()};
+}
+
+function closing(){
+  var s=quizDone?(quizScore>=80?3:(quizScore>=60?2:1)):1;
+  var out="";for(var i=0;i<s;i++)out+="<span>⭐</span>";
+  $("#finalStars").innerHTML=out;
+  $("#finalPts").textContent=points()+" / "+(MAX.room+MAX.benefit+MAX.g1+MAX.g3);
+  $("#finalQ").textContent=quizDone?quizScore+" / 100":"-";
+  var tgl=new Date().toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  var rows=[
+    ["Jelajah Rumah",sk("room_")+" / "+MAX.room],
+    ["Manfaat Mematuhi Aturan",sk("benefit")+" / "+MAX.benefit],
+    ["Permainan 1: Pilih Perilaku",sk("g1_")+" / "+MAX.g1],
+    ["Permainan 2: Ayo Pilah Perilaku","dinilai bersama guru"],
+    ["Permainan 3: Pasangkan",sk("g3_")+" / "+MAX.g3]
+  ];
+  var html='<h3 class="center">📋 Rekap Hasil Belajar</h3><div class="center"><b>Nama: '+esc(theName())+'</b><br>'+tgl+'</div><table>';
+  rows.forEach(function(r){html+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'});
+  html+='<tr><td><b>⭐ Total Poin Permainan</b></td><td><b>'+points()+' / '+(MAX.room+MAX.benefit+MAX.g1+MAX.g3)+'</b></td></tr>'+
+    '<tr><td><b>📝 Nilai Kuis</b></td><td><b>'+(quizDone?quizScore+' / 100':'belum dikerjakan')+'</b></td></tr></table>'+
+    (quizDone?'':'<div class="notice">Kerjakan Evaluasi dulu ya agar bintangmu bertambah!</div>');
+  $("#recap").innerHTML=html;
+  burst();
+}
+
+/* ===== ULANGI BELAJAR: kembali ke kondisi awal ===== */
+function resetAll(){
+  awarded={};seenRule={};seenBen={};
+  quizReset();g1r=0;g3done=false;curTab=0;
+  updPts();
+  initRules();initBenefit();resetRooms();
+  g1Show();g3Init();quizShow();wwReset();
+  ["r1","r2","r3","promise"].forEach(function(id){$("#"+id).value=""});
+  setName("",null);
+  $("#promiseCard").innerHTML="";$("#printOnly").innerHTML="";$("#prn").hidden=true;$("#pfb").textContent="";
+  $("#finalStars").innerHTML="";$("#recap").innerHTML="";
+  $$(".gpane").forEach(function(p,k){p.classList.toggle("on",k===0)});
+  updTabs();
+}
+$("#btnRepeat").onclick=function(){resetAll();go(0)};
+
+/* ===== MULAI ===== */
+if(QUIZ_ONLINE){
+  var qb=h("a","btn purple","🌐 KUIS ONLINE");
+  qb.href=QUIZ_ONLINE;qb.target="_blank";qb.rel="noopener";
+  $("#quizOnline").appendChild(qb);
+}
+initRules();initBenefit();initRooms();g1Show();g3Init();quizShow();initReflect();
+$$(".gpane").forEach(function(p,k){p.classList.toggle("on",k===0)});
+go(0);
+})();
+</script>
+</body>
+</html>
